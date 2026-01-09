@@ -7,14 +7,19 @@ function App() {
   const [direction, setDirection] = useState({ dx: 2, dy: 2 });
   const [timeLeft, setTimeLeft] = useState(15);
   const [gameOver, setGameOver] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const circleSize = 60;
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+
+  // Set window dimensions safely
+  useEffect(() => {
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
+  }, []);
 
   // Circle movement
   useEffect(() => {
     if (gameOver) return;
+    if (dimensions.width === 0 || dimensions.height === 0) return;
 
     const interval = setInterval(() => {
       setPosition((prev) => {
@@ -22,10 +27,10 @@ function App() {
         let newLeft = prev.left + direction.dx;
 
         // Bounce off edges
-        if (newTop <= 0 || newTop + circleSize >= height) {
+        if (newTop <= 0 || newTop + circleSize >= dimensions.height) {
           setDirection((dir) => ({ ...dir, dy: -dir.dy }));
         }
-        if (newLeft <= 0 || newLeft + circleSize >= width) {
+        if (newLeft <= 0 || newLeft + circleSize >= dimensions.width) {
           setDirection((dir) => ({ ...dir, dx: -dir.dx }));
         }
 
@@ -34,7 +39,7 @@ function App() {
     }, 10);
 
     return () => clearInterval(interval);
-  }, [direction, gameOver, width, height]);
+  }, [direction, gameOver, dimensions]);
 
   // Timer
   useEffect(() => {
@@ -43,7 +48,6 @@ function App() {
       setGameOver(true);
       return;
     }
-
     const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     return () => clearTimeout(timer);
   }, [timeLeft, gameOver]);
@@ -99,3 +103,19 @@ function App() {
           onClick={handleClick}
           style={{
             position: "absolute",
+            top: position.top,
+            left: position.left,
+            width: circleSize,
+            height: circleSize,
+            backgroundColor: "#ff4081",
+            borderRadius: "50%",
+            cursor: "pointer",
+            transition: "top 0.01s, left 0.01s",
+          }}
+        ></div>
+      )}
+    </div>
+  );
+}
+
+export default App;
