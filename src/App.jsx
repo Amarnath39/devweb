@@ -5,6 +5,8 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [showMessage, setShowMessage] = useState(true)
+  const [name, setName] = useState("")
 
   return (
     <>
@@ -16,17 +18,41 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React app demoo</h1>
+
+      <h1>Vite + React Demo App 🚀</h1>
+
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        {/* Counter */}
+        <button onClick={() => setCount(count + 1)}>
+          Count is {count}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+        <br /><br />
+
+        {/* Toggle Message */}
+        <button onClick={() => setShowMessage(!showMessage)}>
+          Toggle Message
+        </button>
+
+        {showMessage && (
+          <p>🎉 React State is working perfectly!</p>
+        )}
+
+        <br />
+
+        {/* Input */}
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        {name && <p>Hello, <strong>{name}</strong> 👋</p>}
       </div>
+
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Edit <code>src/App.jsx</code> and save to test HMR
       </p>
     </>
   )
