@@ -1,12 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [showMessage, setShowMessage] = useState(true)
-  const [name, setName] = useState("")
+  const [score, setScore] = useState(0);
+  const [position, setPosition] = useState({ top: 100, left: 100 });
+
+  // Move box randomly every 1.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const top = Math.floor(Math.random() * 300) + 50;
+      const left = Math.floor(Math.random() * 500) + 50;
+      setPosition({ top, left });
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleClick = () => {
+    setScore(score + 1);
+  };
 
   return (
     <>
@@ -19,43 +33,30 @@ function App() {
         </a>
       </div>
 
-      <h1>Vite + React Demo App 🚀</h1>
+      <h1>🎯 Click the Moving Box Game!</h1>
+      <p>Score points by clicking the moving box!</p>
+      <p>Score: {score}</p>
 
-      <div className="card">
-        {/* Counter */}
-        <button onClick={() => setCount(count + 1)}>
-          Count is {count}
-        </button>
-
-        <br /><br />
-
-        {/* Toggle Message */}
-        <button onClick={() => setShowMessage(!showMessage)}>
-          Toggle Message
-        </button>
-
-        {showMessage && (
-          <p>🎉 React State is working perfectly!</p>
-        )}
-
-        <br />
-
-        {/* Input */}
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        {name && <p>Hello, <strong>{name}</strong> 👋</p>}
-      </div>
+      <div
+        onClick={handleClick}
+        style={{
+          position: "absolute",
+          top: position.top,
+          left: position.left,
+          width: "60px",
+          height: "60px",
+          backgroundColor: "red",
+          cursor: "pointer",
+          borderRadius: "8px",
+        }}
+      ></div>
 
       <p className="read-the-docs">
         Edit <code>src/App.jsx</code> and save to test HMR
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
+
